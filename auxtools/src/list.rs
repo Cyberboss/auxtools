@@ -13,6 +13,7 @@ pub struct List {
 
 #[allow(unused)]
 impl List {
+	/// Attempts to interpret the given value as a list, otherwise runtiming.
 	pub fn from_value(val: &Value) -> ConversionResult<Self> {
 		if !Self::is_list(val) {
 			return Err(runtime!("attempted to create List from non-list value"));
@@ -72,6 +73,7 @@ impl List {
 		}
 	}
 
+	/// Sets the value associated with the given key.
 	pub fn set<I: ListKey, V: IntoRawValue>(
 		&self,
 		index: I,
@@ -131,6 +133,7 @@ impl List {
 		}
 	}
 
+	/// BYOND has a lot of datatypes that are lists in disguise, this should catch most of them.
 	pub fn is_list(value: &Value) -> bool {
 		match value.value.tag {
 			ValueTag::List

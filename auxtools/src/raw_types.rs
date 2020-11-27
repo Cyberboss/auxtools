@@ -1,3 +1,5 @@
+//! Some internal things for interfacing with BYOND.
+
 pub mod funcs;
 pub mod lists;
 pub mod misc;

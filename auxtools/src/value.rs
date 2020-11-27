@@ -247,6 +247,8 @@ impl Value {
 		Err(runtime!("External proc call failed"))
 	}
 
+	/// Attempts to convert this Value into a string, whatever type it might be.
+	/// Internally it uses the same thing "[string] formatting" does in DM.
 	pub fn to_string(&self) -> ConversionResult<String> {
 		match self.value.tag {
 			raw_types::values::ValueTag::Null

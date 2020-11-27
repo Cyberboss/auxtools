@@ -6,10 +6,12 @@ use std::result;
 /// These are just simple error messages that our API and hooks can return as failure states.
 #[derive(Debug)]
 pub struct Runtime {
+	/// The error message.
 	pub message: String,
 }
 
 impl Runtime {
+	/// Creates a new runtime with the given error message.
 	pub fn new<S: Into<String>>(message: S) -> Self {
 		Self {
 			message: message.into(),

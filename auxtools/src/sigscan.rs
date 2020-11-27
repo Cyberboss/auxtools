@@ -1,3 +1,5 @@
+//! Scan for functions and other interesting things in memory, using byte patterns.
+
 #[cfg(unix)]
 mod linux;
 #[cfg(windows)]
@@ -10,6 +12,7 @@ pub use windows::Scanner;
 
 pub use auxtools_impl::convert_signature;
 
+/// Converts a "XX YY ZZ" type signature to a vector of Option<u8>
 #[macro_export]
 macro_rules! signature {
 	($sig:tt) => {
@@ -17,6 +20,7 @@ macro_rules! signature {
 	};
 }
 
+/// Creates a struct holding converted signatures.
 #[macro_export]
 macro_rules! signatures {
 	( $( $name:ident => $sig:tt ),* ) => {

@@ -39,7 +39,9 @@ use std::fmt;
 #[derive(Clone)]
 pub struct Proc {
 	pub id: ProcId,
+	/// Pointer to this proc's entry in BYOND's proc information table.
 	pub entry: *mut ProcEntry,
+	/// The textual path of the proc, e.g. "/proc/hello"
 	pub path: String,
 }
 
@@ -54,6 +56,7 @@ impl Proc {
 		get_proc_override(path, override_id)
 	}
 
+	/// Attempts to fetch a proc by ID.
 	pub fn from_id(id: ProcId) -> Option<Self> {
 		let mut proc_entry: *mut ProcEntry = std::ptr::null_mut();
 		unsafe {
@@ -73,6 +76,7 @@ impl Proc {
 		})
 	}
 
+	/// Returns a list of parameter names, as they appear in source code.
 	pub fn parameter_names(&self) -> Vec<StringRef> {
 		let mut misc: *mut misc::Misc = std::ptr::null_mut();
 		unsafe {
@@ -89,6 +93,7 @@ impl Proc {
 		}
 	}
 
+	/// Returns a list of local variable names from the source code.
 	pub fn local_names(&self) -> Vec<StringRef> {
 		let mut misc: *mut misc::Misc = std::ptr::null_mut();
 		unsafe {
@@ -105,6 +110,7 @@ impl Proc {
 		}
 	}
 
+	/// Returns a pointer to raw bytecode.
 	pub unsafe fn bytecode(&self) -> (*mut u32, usize) {
 		let mut misc: *mut misc::Misc = std::ptr::null_mut();
 		assert_eq!(
@@ -115,6 +121,7 @@ impl Proc {
 		((*misc).bytecode.bytecode, (*misc).bytecode.count as usize)
 	}
 
+	/// Disassembles this proc's bytecode into an assembly-like vector of instructions.
 	pub fn disassemble(
 		&self,
 	) -> (

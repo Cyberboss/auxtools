@@ -1,4 +1,10 @@
-#![deny(clippy::complexity, clippy::correctness, clippy::perf, clippy::style)]
+#![deny(
+	clippy::complexity,
+	clippy::correctness,
+	clippy::perf,
+	clippy::style,
+	missing_docs
+)]
 
 //! For when BYOND is not enough. Probably often.
 
@@ -15,18 +21,18 @@ mod list;
 mod proc;
 pub mod raw_types;
 mod runtime;
+pub mod sigscan;
 mod string;
 mod value;
-pub mod sigscan;
 
 use init::{get_init_level, set_init_level, InitLevel};
 
+pub use auxtools_impl::{hook, init, runtime_handler, shutdown};
 pub use context::DMContext;
 pub use disassembler::{
 	opcodes::{OpCode, DEBUG_BREAK_OPCODE, DEBUG_BREAK_OPERAND},
 	Instruction,
 };
-pub use auxtools_impl::{hook, init, runtime_handler, shutdown};
 pub use hooks::{CompileTimeHook, RuntimeHook};
 pub use init::{FullInitFunc, PartialInitFunc, PartialShutdownFunc};
 pub use list::List;
@@ -43,6 +49,7 @@ pub use inventory;
 #[cfg(windows)]
 extern crate winapi;
 
+/// The name of the module where we are going to be scanning for BYOND internals.
 #[cfg(windows)]
 pub const BYONDCORE: &str = "byondcore.dll";
 #[cfg(windows)]
@@ -70,6 +77,7 @@ signatures! {
 	suspended_procs_buffer => "8B 35 ?? ?? ?? ?? 8B 80 ?? ?? ?? ?? 57 8B 3D ?? ?? ?? ?? 8B D7 89 45 ??"
 }
 
+/// The name of the module where we are going to be scanning for BYOND internals.
 #[cfg(unix)]
 pub const BYONDCORE: &str = "libbyond.so";
 #[cfg(unix)]
