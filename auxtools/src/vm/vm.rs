@@ -10,7 +10,7 @@ use std::io::Cursor;
 /// Each opcode is one byte. They may be followed by zero or more operands.
 /// Operands that are more than 1 byte are stored in little-endian format.
 ///
-/// #### Sizes:
+/// #### Operand sizes:
 /// - Register: 1 byte
 /// - Type: 1 byte
 /// - Immediate value: 4 bytes
@@ -104,8 +104,8 @@ impl From<Value> for Register {
 	}
 }
 
-type VType = u32;
-type VValue = u32;
+pub type VType = u32;
+pub type VValue = u32;
 
 /// Contains a type tag and a value. See [value::Value].
 #[derive(Clone, Copy, Debug)]
@@ -188,7 +188,7 @@ impl VM {
 				})
 				.collect::<Vec<crate::value::Value>>();
 			let fuck: Vec<_> = value_args.iter().map(|v| v).collect();
-			let res = proc::Proc::from_id(raw_types::procs::ProcId (id))
+			let res = proc::Proc::from_id(raw_types::procs::ProcId(id))
 				.unwrap()
 				.call(fuck.as_slice())
 				.unwrap();

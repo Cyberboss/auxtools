@@ -1,9 +1,4 @@
-#![deny(
-	clippy::complexity,
-	clippy::correctness,
-	clippy::perf,
-	clippy::style,
-)]
+#![deny(clippy::complexity, clippy::correctness, clippy::perf, clippy::style)]
 
 //! For when BYOND is not enough. Probably often.
 
@@ -26,8 +21,8 @@ mod value;
 
 mod vm;
 
-use vm::vm as vmhook;
 use vm::compiler;
+use vm::vm as vmhook;
 
 use init::{get_init_level, set_init_level, InitLevel};
 
@@ -326,9 +321,7 @@ byond_ffi_fn! { auxtools_init(_input) {
 		}
 	}
 
-
-	hooks::hook_by_id_with_bytecode_dont_use_this(proc::get_proc("/proc/do_sum").unwrap().id,
-		[vec![vmhook::Opcode::LOAD_ARGUMENT as u8,
+	let code = [vec![vmhook::Opcode::LOAD_ARGUMENT as u8,
 		0,
 		0,
 		vmhook::Opcode::LOAD_ARGUMENT as u8,
@@ -345,10 +338,16 @@ byond_ffi_fn! { auxtools_init(_input) {
 		vec![3,
 		vmhook::Opcode::RETURN as u8,
 		3,
-		vmhook::Opcode::HALT as u8]
-		].concat());
 
-	Some(compiler::compile("/proc/do_sum"))
+		vmhook::Opcode::HALT as u8]
+		].concat();
+
+	hooks::hook_by_id_with_bytecode_dont_use_this(proc::get_proc("/proc/do_sum").unwrap().id,
+		code.clone());
+
+	Some(format!("{:#?}", vm::disassembler::Dism::new(code).disassemble()))
+
+	//Some(compiler::compile("/proc/do_sum"))
 
 	//Some("SUCCESS".to_owned())
 } }
